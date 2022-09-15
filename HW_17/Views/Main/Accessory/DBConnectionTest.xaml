@@ -1,0 +1,30 @@
+﻿<Window x:Class="HW_17.Views.Main.Accessory.DBConnectionTest"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HW_17.Views.Main.Accessory"
+        mc:Ignorable="d"
+        DataContext="{Binding DBConnectionTestViewModel, Source={StaticResource Locator}}"
+        Title="DBConnectionTest" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="113*"/>
+            <RowDefinition Height="104*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="629*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0" Grid.Row="0" Margin="2">
+            <Button Content="Проверить" Command="{Binding DBConnectionTestCommand}" CommandParameter="SQL" />
+            <Button Content="Проверить" Command="{Binding DBConnectionTestCommand}" CommandParameter="Access" />
+        </StackPanel>
+        <StackPanel Grid.Column="1" Grid.Row="0" Margin="2">
+            <Label Content="{Binding SQLStatus}" FontSize="10"/>
+            <TextBox Text="{Binding SQLDataBase}" FontSize="10" />
+            <Label Content="{Binding AccessStatus}" FontSize="10"/>
+            <TextBox Text="{Binding AccessDataBase}" FontSize="10"/>
+        </StackPanel>
+    </Grid>
+</Window>

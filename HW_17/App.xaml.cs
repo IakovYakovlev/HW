@@ -5,6 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 using System.IO;
 using System.Runtime.CompilerServices;
 using HW_17.ViewModels;
+using HW_17.Models.Access;
+using HW_17.Models.SQL;
+using HW_17.Services;
 
 namespace HW_17
 {
@@ -39,7 +42,11 @@ namespace HW_17
         }
 
         public static void ConfigureServices(HostBuilderContext host, IServiceCollection services) => services
-            .AddSingleton<MainWindowViewModel>();
+            .AddSingleton<MainWindowViewModel>()
+            .AddSingleton<DBConnectionTestViewModel>()
+            .AddTransient<IDataRepostitory<AccessDataRepository>, AccessDataRepository>()
+            .AddTransient<IDataRepostitory<SQLDataRepository>, SQLDataRepository>()
+            ;
 
         // Меняем в дизайнере папку по умолчанию
         public static string CurrentDirectory => IsDesignMode

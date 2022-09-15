@@ -6,7 +6,9 @@
         xmlns:local="clr-namespace:HW_17"
         mc:Ignorable="d"
         DataContext="{Binding MainWindowViewModel, Source={StaticResource Locator}}"
-        Title="{Binding Title}" Height="450" Width="800">
+        Title="{Binding Title}"
+        WindowStartupLocation="CenterScreen"
+        Height="450" Width="800" >
 
     <DockPanel>
         <StatusBar DockPanel.Dock="Bottom">
@@ -14,24 +16,32 @@
                 <ItemsPanelTemplate>
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="220" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="120" />
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                     </Grid>
                 </ItemsPanelTemplate>
             </StatusBar.ItemsPanel>
-            <StatusBarItem>
-                <TextBlock Text="Connection 1" />
+
+            <StatusBarItem Grid.Column="0">
+                <TextBlock Text="SQL Server про" />
             </StatusBarItem>
+            
             <Separator Grid.Column="1" />
+            
             <StatusBarItem Grid.Column="2">
                 <TextBlock Text="Connection 2" />
             </StatusBarItem>
-        </StatusBar>
-        <Grid DockPanel.Dock="Top">
             
-            <Button Content="Проверить подключение!" Height="20" Width="200" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5" />
-        </Grid>
+            <Separator Grid.Column="3" />
+        </StatusBar>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="Файл">
+                <MenuItem Header="Проверить соединение с базой" Command="{Binding OpenDBConnectionTestWindowCommand}" />
+            </MenuItem>
+        </Menu>
     </DockPanel>
 </Window>
