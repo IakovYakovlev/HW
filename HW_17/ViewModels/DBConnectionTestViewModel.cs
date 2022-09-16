@@ -10,8 +10,8 @@ namespace HW_17.ViewModels
 {
     internal class DBConnectionTestViewModel : ViewModel
     {
-        IDataRepostitory<SQLDataRepository> _sqlRepository;
-        IDataRepostitory<AccessDataRepository> _accessRepository;
+        IDataRepository<Person> _sqlRepository;
+        IDataRepository<Product> _accessRepository;
 
         #region Поля
 
@@ -99,7 +99,7 @@ namespace HW_17.ViewModels
 
         #endregion
 
-        public DBConnectionTestViewModel(IDataRepostitory<SQLDataRepository> sqlRepository, IDataRepostitory<AccessDataRepository> accessRepository)
+        public DBConnectionTestViewModel(IDataRepository<Person> sqlRepository, IDataRepository<Product> accessRepository)
         {
             _sqlRepository = sqlRepository;
             _accessRepository = accessRepository;
@@ -113,6 +113,9 @@ namespace HW_17.ViewModels
             // Выводим строки подключения во View
             _sqlDataBase = _sqlRepository.GetConnectionString();
             _accessDataBase = _accessRepository.GetConnectionString();
+
+            _sqlStatus = "Статус проверки подключения к SQL Server DB";
+            _accessStatus = "Статус проверки подключения к Access";
         }
     }
 }

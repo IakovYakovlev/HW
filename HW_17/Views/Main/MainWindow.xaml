@@ -4,9 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HW_17"
-        mc:Ignorable="d"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         DataContext="{Binding MainWindowViewModel, Source={StaticResource Locator}}"
         Title="{Binding Title}"
+        mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Height="450" Width="800" >
 
@@ -29,19 +30,79 @@
             <StatusBarItem Grid.Column="0">
                 <TextBlock Text="SQL Server про" />
             </StatusBarItem>
-            
+
             <Separator Grid.Column="1" />
-            
+
             <StatusBarItem Grid.Column="2">
                 <TextBlock Text="Connection 2" />
             </StatusBarItem>
-            
+
             <Separator Grid.Column="3" />
         </StatusBar>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="Файл">
                 <MenuItem Header="Проверить соединение с базой" Command="{Binding OpenDBConnectionTestWindowCommand}" />
             </MenuItem>
+            <MenuItem Header="Действия">
+                <MenuItem Header="Добавить пользователя" Command="{Binding OpenPersonWindowCommand}" CommandParameter="0" />
+                <MenuItem Header="Удалить все" Command="{Binding DeleteAllCommand}" />
+            </MenuItem>
         </Menu>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="100*"/>
+                <RowDefinition Height="60*"/>
+            </Grid.RowDefinitions>
+            <DataGrid AutoGenerateColumns="False"
+                      IsReadOnly="True"
+                      ItemsSource="{Binding ListPersonSelectedItem.Products}" 
+                      SelectedItem="{Binding ListProductSelectedItem}" Grid.Row="0">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Id" Binding="{Binding ID}" />
+                    <DataGridTextColumn Header="Email" Binding="{Binding Email}" />
+                    <DataGridTextColumn Header="Код товара" Binding="{Binding ProductCode}" />
+                    <DataGridTextColumn Header="Наименование товара" Binding="{Binding ProductName}" />
+                </DataGrid.Columns>
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Добавить новый продукт" Command="{Binding OpenProductWindowCommand}" CommandParameter="0" />
+                        <MenuItem Header="Изменить" Command="{Binding OpenProductWindowCommand}" CommandParameter="1" />
+                        <MenuItem Header="Удалить" Command="{Binding DeleteProductCommand}"/>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseDoubleClick">
+                        <i:InvokeCommandAction Command="{Binding OpenProductWindowCommand}" CommandParameter="1"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </DataGrid>
+            <DataGrid ItemsSource="{Binding ListPerson}" 
+                      SelectedItem="{Binding ListPersonSelectedItem}"
+                      IsReadOnly="True"
+                      Grid.Row="1"
+                      AutoGenerateColumns="False"
+                      >
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Id" Binding="{Binding Id}" />
+                    <DataGridTextColumn Header="Фамилия" Binding="{Binding Surname}"/>
+                    <DataGridTextColumn Header="Имя" Binding="{Binding Name}"/>
+                    <DataGridTextColumn Header="Отчество" Binding="{Binding Patronymic}"/>
+                    <DataGridTextColumn Header="Номер телефона" Binding="{Binding Tel}"/>
+                    <DataGridTextColumn Header="Email" Binding="{Binding Email}"/>
+                </DataGrid.Columns>
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Добавить новую запись" Command="{Binding OpenPersonWindowCommand}" CommandParameter="0" />
+                        <MenuItem Header="Изменить" Command="{Binding OpenPersonWindowCommand}" CommandParameter="1" />
+                        <MenuItem Header="Удалить" Command="{Binding DeletePersonCommand}"/>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseDoubleClick">
+                        <i:InvokeCommandAction Command="{Binding OpenPersonWindowCommand}" CommandParameter="1" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </DataGrid>
+        </Grid>
     </DockPanel>
 </Window>

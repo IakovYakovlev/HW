@@ -1,12 +1,25 @@
-﻿using HW_17.Services;
+﻿using HW_17.Data;
+using HW_17.Services;
 using Microsoft.Data.SqlClient;
+using System.Collections.Generic;
 using System.Data;
 
 namespace HW_17.Models.SQL
 {
-    internal class SQLDataRepository : IDataRepostitory<SQLDataRepository>
+    internal class SQLDataRepository : IDataRepository<Person>
     {
-        public SQLDataRepository() { }
+        PersonContext _context;
+
+        public SQLDataRepository(PersonContext context) => _context = context;
+
+        public IEnumerable<Person> GetAllData
+        {
+            get
+            {
+                using (SqlConnection sql = new SqlConnection(GetConnectionString()))
+                    return _context.GetAllPerson(sql);
+            }
+        }
 
         /// <summary>
         /// Строка подключения.
@@ -49,6 +62,49 @@ namespace HW_17.Models.SQL
                 return "Ошибка подключения к базе деннах SQL";
             }
             return "Ошибка подключения к базе деннах SQL";
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <exception cref="System.NotImplementedException"></exception>
+        public Person Get(int id)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Add(Person item)
+        {
+            using (SqlConnection sql = new SqlConnection(GetConnectionString()))
+            {
+                _context.AddPersonToTable(sql, item);
+            }
+        }
+
+        public void Update(Person item)
+        {
+            using (SqlConnection sql = new SqlConnection(GetConnectionString()))
+            {
+                _context.UpdatePerson(sql, item);
+            }
+        }
+
+        public void Remove(int id)
+        {
+            using (SqlConnection sql = new SqlConnection(GetConnectionString()))
+            {
+                _context.RemovePerson(sql, id);
+            }
+        }
+
+        public void RemoveAll()
+        {
+            using (SqlConnection sql = new SqlConnection(GetConnectionString()))
+            {
+                _context.RemoveAllDataPerson(sql);
+            }
         }
     }
 }

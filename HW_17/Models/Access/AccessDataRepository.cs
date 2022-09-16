@@ -1,12 +1,29 @@
-﻿using HW_17.Services;
+﻿using HW_17.Data;
+using HW_17.Services;
+using Microsoft.Data.SqlClient;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
 
 namespace HW_17.Models.Access
 {
-    internal class AccessDataRepository : IDataRepostitory<AccessDataRepository>
+    internal class AccessDataRepository : IDataRepository<Product>
     {
-        public AccessDataRepository() { }
+        ProductContext _context;
+
+        public AccessDataRepository(ProductContext context) => _context = context;
+
+        /// <summary>
+        /// Список всех продуктов
+        /// </summary>
+        public IEnumerable<Product> GetAllData
+        {
+            get
+            {
+                using (OleDbConnection sql = new OleDbConnection(GetConnectionString()))
+                    return _context.GetAllProducts(sql);
+            }
+        }
 
         /// <summary>
         /// Строка подключения.
@@ -45,6 +62,37 @@ namespace HW_17.Models.Access
                 return "Ошибка подключения к базе деннах Access";
             }
             return "Ошибка подключения к базе деннах Access";
+        }
+
+        public Product Get(int id)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Add(Product item)
+        {
+            _context.AddProductToTable(GetConnectionString(), item);
+        }
+
+        public void Update(Product item)
+        {
+            _context.UpdateProduct(GetConnectionString(), item);
+        }
+
+        public void Remove(int id)
+        {
+            using (OleDbConnection sql = new OleDbConnection(GetConnectionString()))
+            {
+                _context.RemoveProduct(GetConnectionString(), id);
+            }
+        }
+
+        public void RemoveAll()
+        {
+            using (OleDbConnection sql = new OleDbConnection(GetConnectionString()))
+            {
+                _context.RemoveAllDataProduct(sql);
+            }
         }
     }
 }

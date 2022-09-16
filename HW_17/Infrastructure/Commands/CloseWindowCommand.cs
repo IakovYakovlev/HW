@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using HW_17.Views.Main.Accessory;
+using System;
+using System.Windows;
 
 namespace HW_17.Infrastructure.Commands
 {

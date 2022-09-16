@@ -8,6 +8,7 @@ using HW_17.ViewModels;
 using HW_17.Models.Access;
 using HW_17.Models.SQL;
 using HW_17.Services;
+using HW_17.Data;
 
 namespace HW_17
 {
@@ -44,8 +45,10 @@ namespace HW_17
         public static void ConfigureServices(HostBuilderContext host, IServiceCollection services) => services
             .AddSingleton<MainWindowViewModel>()
             .AddSingleton<DBConnectionTestViewModel>()
-            .AddTransient<IDataRepostitory<AccessDataRepository>, AccessDataRepository>()
-            .AddTransient<IDataRepostitory<SQLDataRepository>, SQLDataRepository>()
+            .AddScoped<PersonContext>()
+            .AddScoped<ProductContext>()
+            .AddTransient<IDataRepository<Product>, AccessDataRepository>()
+            .AddTransient<IDataRepository<Person>, SQLDataRepository>()
             ;
 
         // Меняем в дизайнере папку по умолчанию
