@@ -7,7 +7,6 @@ using HW_17.Models.SQL;
 using HW_17.Models.Access;
 using HW_17.Services;
 using System;
-using Microsoft.IdentityModel.Tokens;
 using System.Windows;
 using System.Linq;
 
@@ -96,6 +95,7 @@ namespace HW_17.ViewModels
 
             if (Convert.ToInt32(p) != 0 && ListPersonSelectedItem == null) return;
 
+            // Добавляем новую запись
             if (Convert.ToInt32(p) == 0)
             {
                 personeWindow = new PersonWindow();
@@ -112,6 +112,8 @@ namespace HW_17.ViewModels
                     MessageBox.Show("Успешное добавление", "Добавление", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
+
+            // Обновляем запись
             else
             {
                 personeWindow = new PersonWindow();
@@ -181,9 +183,9 @@ namespace HW_17.ViewModels
             ProductWindow productWindow;
             Product product;
 
+            // Создаем новый продукт
             if (Convert.ToInt32(p) == 0)
             {
-                // Создаем новый продукт
                 productWindow = new ProductWindow();
                 productWindow.Email = ListPersonSelectedItem.Email;
 
@@ -198,9 +200,10 @@ namespace HW_17.ViewModels
                     MessageBox.Show("Успешное добавление", "Добавление", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
+
+            // Делаем изменения выделенного продукта
             else
             {
-                // Делаем изменения выделенного продукта
                 productWindow = new ProductWindow();
                 productWindow.ID = ListProductSelectedItem.ID;
                 productWindow.Email = ListProductSelectedItem.Email;
@@ -285,6 +288,7 @@ namespace HW_17.ViewModels
 
             #endregion
 
+            // Заполняем список.
             ListPerson = new ObservableCollection<Person>(_personRepostitory.GetAllData);
         }
     }

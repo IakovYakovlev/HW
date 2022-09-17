@@ -21,10 +21,6 @@ namespace HW_17.Models.SQL
             }
         }
 
-        /// <summary>
-        /// Строка подключения.
-        /// </summary>
-        /// <returns>Строка</returns>
         public string GetConnectionString()
         {
             SqlConnectionStringBuilder conStr = new SqlConnectionStringBuilder()
@@ -40,11 +36,6 @@ namespace HW_17.Models.SQL
             return conStr.ConnectionString;
         }
 
-        /// <summary>
-        /// Проверка подключения к базе деннах.
-        /// </summary>
-        /// <param name="conStr">Строка подключения из View</param>
-        /// <returns>Успешно или нет</returns>
         public string ConnectionsTest(string conStr)
         {
             try
@@ -64,12 +55,6 @@ namespace HW_17.Models.SQL
             return "Ошибка подключения к базе деннах SQL";
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        /// <exception cref="System.NotImplementedException"></exception>
         public Person Get(int id)
         {
             throw new System.NotImplementedException();

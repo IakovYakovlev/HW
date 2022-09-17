@@ -1,5 +1,4 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Windows;
 
@@ -11,6 +10,7 @@ namespace HW_17.Views.Main.Accessory
     public partial class PersonWindow : Window
     {
         #region Поля
+
         public static readonly DependencyProperty IdProperty = DependencyProperty.Register(
             nameof(Id),
             typeof(int),
