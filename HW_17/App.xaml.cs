@@ -9,6 +9,7 @@ using HW_17.Models.Access;
 using HW_17.Models.SQL;
 using HW_17.Services;
 using HW_17.Data;
+using HW_17.Models.DataContext;
 
 namespace HW_17
 {
@@ -43,10 +44,9 @@ namespace HW_17
         }
 
         public static void ConfigureServices(HostBuilderContext host, IServiceCollection services) => services
+            .AddDatabase(host.Configuration.GetSection("Data"))
             .AddSingleton<MainWindowViewModel>()
             .AddSingleton<DBConnectionTestViewModel>()
-            .AddScoped<PersonContext>()
-            .AddScoped<ProductContext>()
             .AddTransient<IDataRepository<Product>, AccessDataRepository>()
             .AddTransient<IDataRepository<Person>, SQLDataRepository>()
             ;

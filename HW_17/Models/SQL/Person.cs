@@ -38,6 +38,6 @@ namespace HW_17.Models.SQL
         /// <summary>
         /// Коллекция продуктов к записи
         /// </summary>
-        public IEnumerable<Product> Products { get; set; }
+        public IEnumerable<Product>? Products { get; set; }
     }
 }

@@ -44,7 +44,17 @@ namespace HW_17.ViewModels
         private Person _listPersonSelectedItem;
 
         /// <summary>Выделенный клиент</summary>
-        public Person ListPersonSelectedItem { get => _listPersonSelectedItem; set => Set(ref _listPersonSelectedItem, value); }
+        public Person ListPersonSelectedItem 
+        { 
+            get
+            {
+                //var products = _productRepostitory.GetAllData;
+                //if( _listPersonSelectedItem != null )
+                //        _listPersonSelectedItem.Products = products.Where(e => e.Email == _listPersonSelectedItem.Email).ToList();
+                return _listPersonSelectedItem;
+            } 
+            set => Set(ref _listPersonSelectedItem, value); 
+        }
 
         #endregion
 
@@ -126,22 +136,20 @@ namespace HW_17.ViewModels
 
                 if (personeWindow.ShowDialog() == true)
                 {
-                    person = new Person();
-                    person.Id = personeWindow.Id;
-                    person.Surname = personeWindow.Surname;
-                    person.Name = personeWindow.Name;
-                    person.Patronymic = personeWindow.Patronymic;
-                    person.Tel = personeWindow.Tel;
-                    person.Email = personeWindow.Email;
-
-                    _personRepostitory.Update(person);
+                    ListPersonSelectedItem.Products = null;
+                    ListPersonSelectedItem.Products = new ObservableCollection<Product>();
+                    ListPersonSelectedItem.Id = personeWindow.Id;
+                    ListPersonSelectedItem.Surname = personeWindow.Surname;
+                    ListPersonSelectedItem.Name = personeWindow.Name;
+                    ListPersonSelectedItem.Patronymic = personeWindow.Patronymic;
+                    ListPersonSelectedItem.Tel = personeWindow.Tel;
+                    ListPersonSelectedItem.Email = personeWindow.Email;
+                    _personRepostitory.Update(ListPersonSelectedItem);
                     MessageBox.Show("Успешное изменение", "Изменения", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
-
-            ListPerson.Clear();
-            ListPerson = new ObservableCollection<Person>(_personRepostitory.GetAllData);
-
+            ClearList();
+            listFill();
         }
 
         #endregion
@@ -212,20 +220,20 @@ namespace HW_17.ViewModels
 
                 if (productWindow.ShowDialog() == true)
                 {
-                    product = new Product();
-                    product.ID = productWindow.ID;
-                    product.Email = productWindow.Email;
-                    product.ProductCode = productWindow.ProductCode;
-                    product.ProductName = productWindow.ProductName;
+                    ListProductSelectedItem.ID = productWindow.ID;
+                    ListProductSelectedItem.Email = productWindow.Email;
+                    ListProductSelectedItem.ProductCode = productWindow.ProductCode;
+                    ListProductSelectedItem.ProductName = productWindow.ProductName;
 
-                    _productRepostitory.Update(product);
+                    _productRepostitory.Update(ListProductSelectedItem);
                     MessageBox.Show("Успешное изменение", "Изменения", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
 
-            ListPerson.Clear();
-            ListPerson = new ObservableCollection<Person>(_personRepostitory.GetAllData);
-
+            int id = ListPersonSelectedItem.Id;
+            ClearList();
+            listFill();
+            ListPersonSelectedItem = ListPerson.FirstOrDefault(i => i.Id == id);
         }
 
         #endregion
@@ -242,7 +250,7 @@ namespace HW_17.ViewModels
         private void OnDeleteProductCommanExecuted(object p)
         {
             _productRepostitory.Remove(ListProductSelectedItem.ID);
-            ListPersonSelectedItem.Products = _productRepostitory.GetAllData.Where(x => x.Email == ListPersonSelectedItem.Email);
+            ListPersonSelectedItem.Products = _productRepostitory.GetAllData.Where(x => x.Email == ListPersonSelectedItem.Email).ToList();
             
             // Рефрешим выделенную запись.
             var s = ListPersonSelectedItem;
@@ -288,8 +296,33 @@ namespace HW_17.ViewModels
 
             #endregion
 
-            // Заполняем список.
-            ListPerson = new ObservableCollection<Person>(_personRepostitory.GetAllData);
+            listFill();
         }
+
+        /// <summary>
+        /// Добавление записей в список.
+        /// </summary>
+        void listFill()
+        {
+            // Заполняем список.
+            var persons = _personRepostitory.GetAllData.ToList();
+            var products = _productRepostitory.GetAllData;
+
+            foreach (var per in persons)
+            {
+                per.Products = products.Where(prod => prod.Email == per.Email).ToList();
+            }
+            ListPerson = new ObservableCollection<Person>(persons);
+        }
+
+        /// <summary>
+        /// Удаление записей из списка.
+        /// </summary>
+        void ClearList()
+        {
+            ListPerson.Clear();
+        }
+        
+
     }
 }

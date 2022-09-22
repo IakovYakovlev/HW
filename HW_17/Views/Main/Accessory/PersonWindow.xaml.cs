@@ -74,7 +74,7 @@ namespace HW_17.Views.Main.Accessory
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if(String.IsNullOrEmpty(Name)
+            if (String.IsNullOrEmpty(Name)
                || String.IsNullOrEmpty(Surname)
                || String.IsNullOrEmpty(Patronymic)
                || String.IsNullOrEmpty(Email))
