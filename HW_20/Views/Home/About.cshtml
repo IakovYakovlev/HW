@@ -1,0 +1,54 @@
+﻿@model PhoneBook
+
+@{
+	ViewBag.Title = "Вся информация";
+	Layout = "_Layout";
+}
+
+<body class="m-1 p-1">
+	<div class="mb-2 row">
+		<label class="col" asp-for="Id">Id</label>
+		<div class="col-10">
+			<input class="form-control" asp-for="Id" readonly />
+		</div>
+	</div>
+	<div class="mb-2 row">
+		<label class="col" asp-for="Surname">Фамилия</label>
+		<div class="col-sm-10">
+			<input class="form-control" asp-for="Surname" readonly />
+		</div>
+	</div>
+	<div class="mb-2 row">
+		<label class="col" asp-for="Name">Имя</label>
+		<div class="col-sm-10">
+			<input class="form-control" asp-for="Name" readonly />
+		</div>
+	</div>
+	<div class="mb-2 row">
+		<label class="col" asp-for="Patronymic">Отчество</label>
+		<div class="col-10">
+			<input class="form-control" asp-for="Patronymic" readonly />
+		</div>
+	</div>
+	<div class="mb-2 row">
+		<label class="col" asp-for="PhoneNumber">Номер телефона :</label>
+		<div class="col-10">
+			<input class="form-control" asp-for="PhoneNumber" readonly />
+		</div>
+	</div>
+	<div class="mb-2 row">
+		<label class="col" asp-for="Adress">Адрес</label>
+		<div class="col-10">
+			<input class="form-control" asp-for="Adress" readonly />
+		</div>
+	</div>
+	<div class="mb-2 row">
+		<label class="col" asp-for="Description">Описание</label>
+		<div class="col-10">
+			<input class="form-control" asp-for="Description" readonly />
+		</div>
+	</div>
+	<div class="ms-1 mb-2 row">
+		<a class="btn btn-primary col-2" asp-action="Index">Венуться в начало</a>
+	</div>
+</body>

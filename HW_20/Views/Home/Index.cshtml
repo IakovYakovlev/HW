@@ -1,0 +1,31 @@
+﻿@model IEnumerable<PhoneBook>
+@{
+	ViewBag.Title = "Phone book";
+	Layout = "_Layout";
+}
+
+<body class="m-1 p-1">
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr><th>ID</th><th>Фамилия</th><th>Имя</th><th>Отчество</th></tr>
+		</thead>
+		<tbody>
+			@if(Model == null)
+			{
+				<tr><td colspan="4" class="text-center">No Model Data</td></tr>
+			}
+			else
+			{
+				@foreach(var p in Model)
+				{
+					<tr>
+						<td><a asp-action="About" asp-route-id="@p.Id">@p.Id</a></td>
+						<td>@p.Surname</td>
+						<td>@p.Name</td>
+						<td>@p.Patronymic</td>
+					</tr>
+				}
+			}
+		</tbody>
+	</table>
+</body>
