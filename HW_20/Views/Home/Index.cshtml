@@ -19,13 +19,25 @@
 				@foreach(var p in Model)
 				{
 					<tr>
-						<td><a asp-action="About" asp-route-id="@p.Id">@p.Id</a></td>
+						<td><a asp-action="Edit" asp-route-id="@p.Id">@p.Id</a></td>
 						<td>@p.Surname</td>
 						<td>@p.Name</td>
 						<td>@p.Patronymic</td>
+						<td>
+							<form asp-action="Delete" method="post">
+								<input type="hidden" name="id" value="@p.Id" />
+								<button type="submit" class="btn btn-danger">Delete</button>
+							</form>
+						</td>
 					</tr>
 				}
 			}
 		</tbody>
 	</table>
+
+	<div class="mb-1 fixed-bottom">
+		<div class="shadow-lg rounded">
+			<a asp-action="Create" class="btn align-self-center btn-primary ms-2 mb-1">Добавить</a>
+		</div>
+	</div>
 </body>

@@ -17,17 +17,21 @@ namespace HW_20.Models
 
         public void Add(PhoneBook item)
         {
-            throw new NotImplementedException();
-        }
-
-        public void Remove(int id)
-        {
-            throw new NotImplementedException();
+            item.Id = 0;
+            _context.PhoneBooks.Add(item);
+            _context.SaveChanges();
         }
 
         public void Update(PhoneBook item)
         {
-            throw new NotImplementedException();
+            _context.PhoneBooks.Update(item);
+            _context.SaveChanges();
+        }
+
+        public void Remove(int id)
+        {
+            _context.PhoneBooks.Remove(Get(id));
+            _context.SaveChanges();
         }
     }
 }
