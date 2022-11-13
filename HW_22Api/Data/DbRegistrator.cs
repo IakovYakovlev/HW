@@ -1,5 +1,4 @@
-﻿using HW_22Api.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace HW_22Api.Data
 {

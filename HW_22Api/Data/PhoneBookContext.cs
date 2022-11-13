@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using IdentityShared;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace HW_22Api.Models
+namespace HW_22Api.Data
 {
     public class PhoneBookContext : IdentityDbContext
     {
@@ -12,19 +13,19 @@ namespace HW_22Api.Models
 
         public static async Task CreateAdminAccount(IServiceProvider serviceProvider, IConfiguration configuration)
         {
-            using(var scope = serviceProvider.CreateScope())
+            using (var scope = serviceProvider.CreateScope())
             {
                 UserManager<IdentityUser> userManager = (UserManager<IdentityUser>)scope.ServiceProvider.GetService(typeof(UserManager<IdentityUser>));
 
                 RoleManager<IdentityRole> roleManager = (RoleManager<IdentityRole>)scope.ServiceProvider.GetService(typeof(RoleManager<IdentityRole>));
-            
+
                 string email = configuration["Admin:AdminUser:Email"];
                 string password = configuration["Admin:AdminUser:Password"];
                 string role = configuration["Admin:AdminUser:Role"];
 
-                if(await userManager.FindByEmailAsync(email) == null)
+                if (await userManager.FindByEmailAsync(email) == null)
                 {
-                    if(await roleManager.FindByNameAsync(role) == null)
+                    if (await roleManager.FindByNameAsync(role) == null)
                     {
                         await roleManager.CreateAsync(new IdentityRole(role));
                     }
@@ -37,7 +38,7 @@ namespace HW_22Api.Models
 
                     IdentityResult result = await userManager.CreateAsync(user, password);
 
-                    if(result.Succeeded)
+                    if (result.Succeeded)
                     {
                         await userManager.AddToRoleAsync(user, role);
                     }

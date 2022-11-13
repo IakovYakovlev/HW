@@ -5,18 +5,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HW_22Api.Controllers
 {
+    [Authorize(Roles = "Admins")]
     [Route("api/[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
     {
         private IUserService _userService;
-        private IConfiguration _configuration;
 
-        public AuthController(IUserService userService, IConfiguration configuration)
-        {
-            _userService = userService;
-            _configuration = configuration;
-        }
+        public AuthController(IUserService userService) => _userService = userService;
 
         // /api/auth/getall
         [HttpGet("GetAll")]
@@ -29,9 +25,10 @@ namespace HW_22Api.Controllers
 
             return BadRequest(result);
 
-        } 
+        }
 
         // /api/auth/register
+        [AllowAnonymous]
         [HttpPost("Register")]
         public async Task<IActionResult> RegisterAsync([FromBody]RegisterViewModel model)
         {
@@ -56,8 +53,20 @@ namespace HW_22Api.Controllers
             return BadRequest(result);
         }
 
+        // /api/auth/edit
+        [HttpPut("Edit")]
+        public async Task<IActionResult> EditAsync([FromBody]Users user)
+        {
+            var result = await _userService.EditAsync(user);
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
         // /api/auth/delete/{id}
-        //[Authorize(Roles = "Admins")]
+        [Authorize(Roles = "Admins")]
         [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> DeleteAsync(string id)
         {
@@ -69,6 +78,5 @@ namespace HW_22Api.Controllers
             }
             return BadRequest(result);
         }
-
     }
 }

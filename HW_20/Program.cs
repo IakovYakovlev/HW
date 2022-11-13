@@ -1,11 +1,11 @@
-using HW_20.Data;
-using HW_20.Models;
+
+using HW_20.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
-builder.Services.AddDatabase(builder.Configuration.GetSection("Data"));
-builder.Services.AddTransient<IPhoneBookRepository, PhoneBookRepository>();
+
+builder.Services.AddHttpClient<HomeController>();
 
 var app = builder.Build();
 

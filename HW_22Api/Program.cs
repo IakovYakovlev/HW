@@ -1,6 +1,5 @@
 using HW_22Api;
 using HW_22Api.Data;
-using HW_22Api.Models;
 using HW_22Api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Hosting;

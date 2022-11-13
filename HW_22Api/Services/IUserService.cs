@@ -1,22 +1,23 @@
 ﻿using IdentityShared;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
-using System.Reflection.Metadata.Ecma335;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace HW_22Api.Services
 {
     public interface IUserService
     {
-        Task<UserManagerResponse> GetAllUsers();
+        Task<UsersManager> GetAllUsers();
 
         Task<UserManagerResponse> RegisterUserAsync(RegisterViewModel model);
 
         Task<UserManagerResponse> LoginUserAsync(LoginViewModel model);
+
+        Task<UserManagerResponse> EditAsync(Users item);
 
         Task<UserManagerResponse> DeleteUserAsync(string id);
     }
@@ -25,16 +26,24 @@ namespace HW_22Api.Services
     {
         private UserManager<IdentityUser> _userManager;
         private RoleManager<IdentityRole> _roleManager;
+        private IUserValidator<IdentityUser> _userValidator;
+        private IPasswordValidator<IdentityUser> _passwordValidator;
+        private IPasswordHasher<IdentityUser> _passwordHasher;
         private IConfiguration _configuration;
 
-        public UserService(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+        public UserService(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, 
+            IUserValidator<IdentityUser> userValidator, IConfiguration configuration, IPasswordValidator<IdentityUser> passwordValidator,
+            IPasswordHasher<IdentityUser> passwordHasher)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _userValidator = userValidator;
             _configuration = configuration;
+            _passwordValidator = passwordValidator;
+            _passwordHasher = passwordHasher;
         }
 
-        public async Task<UserManagerResponse> GetAllUsers()
+        public async Task<UsersManager> GetAllUsers()
         {
             List<Users> users = await _userManager.Users.Select(x => new Users
             {
@@ -44,15 +53,15 @@ namespace HW_22Api.Services
 
             if(users != null)
             {
-                new AllUsers { Users = users };
-                return new UserManagerResponse
-                {
+                return new UsersManager 
+                { 
                     Message = "Список с пользователями",
                     IsSuccess = true,
+                    Users = users 
                 };
             }
 
-            return new UserManagerResponse
+            return new UsersManager
             {
                 Message = "Список с пользователями пуст",
                 IsSuccess = false,
@@ -137,6 +146,55 @@ namespace HW_22Api.Services
                 IsSuccess = true,
                 ExpireDate = token.ValidTo
             };
+        }
+
+        public async Task<UserManagerResponse> EditAsync(Users item)
+        {
+            IdentityUser user = await _userManager.FindByIdAsync(item.Id);
+
+            if(user != null)
+            {
+                user.Email = item.Email;
+
+                IdentityResult validEmail = await _userValidator.ValidateAsync(_userManager, user);
+
+                IdentityResult validPass = null;
+
+                if (!string.IsNullOrEmpty(item.Password))
+                {
+                    validPass = await _passwordValidator.ValidateAsync(_userManager, user, item.Password);
+                    if (validPass.Succeeded)
+                    {
+                        user.PasswordHash = _passwordHasher.HashPassword(user, item.Password);
+                    }
+                }
+
+                if((validEmail.Succeeded && validPass == null) || (validEmail.Succeeded && item.Password != String.Empty && validPass.Succeeded))
+                {
+                    IdentityResult result = await _userManager.UpdateAsync(user);
+                    if (result.Succeeded)
+                    {
+                        return new UserManagerResponse
+                        {
+                            Message = $"Данные пользователя {item.Id} изменены",
+                            IsSuccess = true,
+                        };
+                    }
+                }
+                return new UserManagerResponse
+                {
+                    Message = $"",
+                    IsSuccess = false,
+                };
+            }
+            else
+            {
+                return new UserManagerResponse
+                {
+                    Message = $"",
+                    IsSuccess = false,
+                };
+            }
         }
 
         public async Task<UserManagerResponse> DeleteUserAsync(string id)

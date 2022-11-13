@@ -1,4 +1,4 @@
-﻿namespace HW_20.Models
+﻿namespace IdentityShared
 {
     public class PhoneBook
     {
