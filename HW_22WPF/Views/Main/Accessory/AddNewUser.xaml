@@ -1,0 +1,26 @@
+﻿<Window x:Class="HW_22WPF.Views.Main.Accessory.AddNewUser"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HW_22WPF.Views.Main.Accessory"
+        mc:Ignorable="d"
+        Title="AddNewUser" Height="350" Width="600" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Border BorderBrush="Black" BorderThickness="1" Margin="20">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Label Content="Электронная почта нового пользователя :" />
+                <TextBox x:Name="txtEmail" />
+                <Label Content="Пароль нового пользователя :" Margin="0,10,0,0" />
+                <PasswordBox x:Name="txtPassword" />
+                <Label Content="Подтвердите пароль нового пользователя :" />
+                <PasswordBox x:Name="txtPasswordConfirmation" />
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+                    <Button x:Name="btnOk" Content="Ok" Width="50" Click="btnOk_Click" Margin="0,0,10,0" />
+                    <Button x:Name="btnCancel" Content="Отмена" Width="50" Click="btnCancel_Click" />
+                </StackPanel>
+            </StackPanel>
+        </Border>
+        
+    </Grid>
+</Window>

@@ -1,0 +1,25 @@
+﻿<Window x:Class="HW_22WPF.Views.Main.Accessory.AdministratorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HW_22WPF.Views.Main.Accessory"
+        DataContext="{Binding AdministratorWindowViewModel, Source={StaticResource Locator}}"
+        mc:Ignorable="d"
+        Title="{Binding Title}" Height="170" Width="400">
+    <Grid>
+        <DataGrid AutoGenerateColumns="false" ItemsSource="{Binding ListUsers}"
+                  SelectedItem="{Binding SelectedUser}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Номер" Binding="{Binding Id}" />
+                <DataGridTextColumn Header="Электронная почта" Binding="{Binding Email}" />
+            </DataGrid.Columns>
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Добавить нового пользователя" Command="{Binding OpenWindowAddNewUserCommand}" />
+                    <MenuItem Header="Удалить пользователя" Command="{Binding DeleteSelectedUserCommand}" />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+        </DataGrid>
+    </Grid>
+</Window>

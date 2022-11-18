@@ -3,13 +3,8 @@ using HW_22WPF.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
 using System.IO;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace HW_22WPF
@@ -42,11 +37,16 @@ namespace HW_22WPF
             __host = null;
         }
 
-        public static void ConfigureServices(HostBuilderContext host, IServiceCollection services) => services
-            .AddTransient<MainWindowViewModel>()
-            .AddTransient<IPhoneBook, PhoneBookRepository>()
-            .AddHttpClient<PhoneBookRepository>()
-            ;
+        public static void ConfigureServices(HostBuilderContext host, IServiceCollection services)
+        {
+            services.AddTransient<MainWindowViewModel>();
+            services.AddTransient<AdministratorWindowViewModel>();
+            services.AddTransient<IPhoneBookRepository, PhoneBookRepository>();
+            services.AddTransient<IUserService, UserService>();
+            services.AddHttpClient<PhoneBookRepository>();
+            services.AddHttpClient<UserService>();
+        }
+
 
         public static string CurrentDirectory => IsDesignMode
             ? Path.GetDirectoryName(GetSourceCodePath())

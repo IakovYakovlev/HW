@@ -115,8 +115,9 @@ namespace HW_22Api.Services
         public async Task<UserManagerResponse> LoginUserAsync(LoginViewModel model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
-
-            if(user == null)
+            var role = await _userManager.GetRolesAsync(user);
+            
+            if (user == null)
             {
                 return new UserManagerResponse
                 {
@@ -126,23 +127,29 @@ namespace HW_22Api.Services
             }
 
             var claims = new[]
-{
-                    new Claim("Email", model.Email),
-                    new Claim(ClaimTypes.NameIdentifier, user.Id),
-                };
+            {
+                new Claim("Email", model.Email),
+                new Claim(ClaimTypes.Role, role.First())
+            };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["AuthSettings:Key"]));
 
             var token = new JwtSecurityToken(
+                issuer: _configuration["AuthSettings:Issuer"],
+                audience: _configuration["AuthSettings:Audience"],
                 claims: claims,
-                expires: DateTime.Now.AddDays(1),
+                expires: DateTime.Now.AddDays(30),
                 signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256));
 
             string tokenAsString = new JwtSecurityTokenHandler().WriteToken(token);
 
+
+
             return new UserManagerResponse
             {
                 Message = tokenAsString,
+                UserEmail = user.Email,
+                UserRole = role.First(),
                 IsSuccess = true,
                 ExpireDate = token.ValidTo
             };
@@ -210,18 +217,21 @@ namespace HW_22Api.Services
                         Message = $"Пользователесь {user.Email} удален",
                         IsSuccess = true,
                     };
-                
+                else
+                    return new UserManagerResponse
+                    {
+                        Message = $"Пользователесь {user.Email} не удален",
+                        IsSuccess = false,
+                    };
+            }
+            else
+            {
                 return new UserManagerResponse
                 {
-                    Message = $"Пользователесь {user.Email} не удален",
+                    Message = $"Пользователесь {id} не найден",
                     IsSuccess = false,
                 };
             }
-            return new UserManagerResponse
-            {
-                Message = $"Пользователесь {id} не найден",
-                IsSuccess = false,
-            };
         }
     }
 }

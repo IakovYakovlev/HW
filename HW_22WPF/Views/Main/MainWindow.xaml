@@ -4,17 +4,55 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HW_22WPF"
-        DataContext="{Binding MainWindowViewModel, Source={StaticResource Locatro}}"
+        DataContext="{Binding MainWindowViewModel, Source={StaticResource Locator}}"
         mc:Ignorable="d"
-        Title="{Binding Title}" Height="450" Width="800">
+        Title="{Binding Title}" Height="450" Width="500" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="384*"/>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="55"/>
         </Grid.RowDefinitions>
-        <DataGrid ItemsSource="{Binding ListPhoneBook}">
-            
+        <DataGrid Grid.Row="0"
+                  IsReadOnly="True"
+                  HorizontalScrollBarVisibility="Auto"
+                  AutoGenerateColumns="False"
+                  ItemsSource="{Binding ListPhoneBook}"
+                  SelectedItem="{Binding SelectedPerson}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Ид" Binding="{Binding Id}" />
+                <DataGridTextColumn Header="Фамилия" Binding="{Binding Surname}" />
+                <DataGridTextColumn Header="Имя" Binding="{Binding Name}" />
+                <DataGridTextColumn Header="Отчество" Binding="{Binding Patronymic}" />
+                <DataGridTextColumn Header="Номер телефона" Binding="{Binding PhoneNumber}" />
+                <DataGridTextColumn Header="Адрес" Binding="{Binding Adress}" />
+                <DataGridTextColumn Header="Описание" Binding="{Binding Description}" />
+            </DataGrid.Columns>
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Добавить новую запись" Command="{Binding OpenAddOrUpdateWindowCommand}" CommandParameter="0" />
+                    <MenuItem Header="Изменить запись" Command="{Binding OpenAddOrUpdateWindowCommand}" CommandParameter="1" />
+                    <MenuItem Header="Удалить запись" Command="{Binding DeleteSelectedPersonCommand}" />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
         </DataGrid>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,5,0">
+            <StackPanel Orientation="Horizontal" Margin="5,0,0,0">
+                <!--<Button Content="Зарегистрировать" Width="120" Height="25" Margin="0,0,5,0" Command="{Binding OpenRegistrationWindowCommand}" />-->
+                <Button Content="Администратор" Width="100" Height="25" Margin="0,0,5,0" Command="{Binding OpenAdministratorWindowCommand}" />
+                <Button Content="Войти" Width="50" Height="25" Command="{Binding OpenLoginWindowCommand}" />
+            </StackPanel>
+            <StackPanel Margin="5,2,0,2" >
+                <StackPanel Orientation="Horizontal" >
+                    <Label Content="Пользователь :" />
+                    <Label Content="{Binding UserEmail}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Роль :" />
+                    <Label Content="{Binding UserRole}" />
+                </StackPanel>
+            </StackPanel>
+            
+        </StackPanel>
         
     </Grid>
 </Window>

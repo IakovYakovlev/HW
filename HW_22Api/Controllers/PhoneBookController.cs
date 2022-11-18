@@ -6,6 +6,7 @@ using System.Data;
 
 namespace HW_22Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PhoneBookController : ControllerBase
@@ -52,7 +53,7 @@ namespace HW_22Api.Controllers
         }
 
         // /api/phonebook/delete/{id}
-        [Authorize(Roles = "Admins")]
+        [Authorize(Roles ="Admins")]
         [HttpDelete("Delete/{id}")]
         public IResult Delete(int id)
         {

@@ -1,0 +1,33 @@
+﻿@model LoginViewModel
+
+@{
+	ViewBag.Title = "Вход";
+	Layout = "_Layout";
+}
+
+@section scripts {
+	<script src="~/lib/jquery/jquery.min.js"></script>
+	<script src="~/lib/jquery-validate/jquery.validate.min.js"></script>
+	<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
+
+<div class="row justify-content-center">
+	<form asp-action="Login" method="post" class="col-6">
+		<div class="ms-2 form-group">
+			<label asp-for="Email">Электронная почта :</label>
+				<input asp-for="Email"
+					data-val-email="В поле электронная почта введено не подходящее значение для электронной почты"
+					data-val-required="Не введено значение"
+					class="form-control" />
+			<div><span asp-validation-for="Email" class="text-danger"></span></div>
+		</div>
+		<div class="ms-2 form-group">
+			<label asp-for="Password">Пароль :</label>
+			<input type="password" asp-for="Password" class="form-control" />
+		</div>
+		<div class="text-center">
+			<button class="mt-2 ms-2 btn btn-primary" type="submit">Войти</button>
+		</div>
+	</form>
+</div>
+

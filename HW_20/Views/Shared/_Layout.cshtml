@@ -4,12 +4,43 @@
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
     <link rel="stylesheet" asp-href-include="/lib/bootstrap/css/*.min.css" />
+    @RenderSection("scripts", false);
 </head>
 <body>
     <div class="bg-primary p-2 row">
         <div class="col">
             <a href="/" class="h4 text-white">@ViewBag.Title</a>
         </div>
+        @if (Context.Request.Cookies["Token"] == null)
+        {
+            <div class="col text-start">
+                <a asp-action="Login" asp-controller="Account" class="h4 text-white">Войти</a>
+            </div>
+        }
+        else
+        {
+            <div class="col-5">
+                <div class="row">
+                    <div class="col text-start">
+                        <label class="text-white">Роль :</label>
+                    </div>
+                    <div class="col">
+                        <Label class="text-white">@Context.Request.Cookies["UserRole"]</Label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col text-start">
+                        <label class="text-white">Электронная почта :</label>
+                    </div>
+                    <div class="col">
+                        <Label class="text-white">@Context.Request.Cookies["UserEmail"]</Label>
+                    </div>
+                </div>
+            </div>
+            <div class="col text-start">
+                <a asp-action="LogOut" asp-controller="Account" class="h4 text-white">Выйти</a>
+            </div>
+        }
     </div>
     <div>
         @RenderBody()

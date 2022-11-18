@@ -1,0 +1,35 @@
+﻿@model RegisterViewModel
+@{
+    ViewBag.Title = "Регистрация ногово пользователя";
+    Layout = "_Layout";
+}
+
+<div class="m-1 p-1">
+    <form asp-action="Register" method="post" class="form-check">
+        <div class="mb-2 row">
+            <label class="col" asp-for="Email">Электронная почта :</label>
+            <div class="form-group col-10">
+                <input class="form-control" asp-for="Email" />
+                <div><span asp-validation-for="Email" class="text-danger"></span></div>
+            </div>
+        </div>
+        <div class="mb-2 row">
+            <label class="col" asp-for="Password">Пароль :</label>
+            <div class="col-10">
+                <input type="password" id="password" class="form-control" asp-for="Password" />
+                <div><span asp-validation-for="Password" class="text-danger"></span></div>
+            </div>
+        </div>
+        <div class="mb-2 row">
+            <label class="col" asp-for="ConfirmPassword">Повторите параль :</label>
+            <div class="col-10">
+                <input type="password" id="passwordConfirm" class="form-control" asp-for="ConfirmPassword" />
+                <div><span asp-validation-for="ConfirmPassword" class="text-danger"></span></div>
+            </div>
+        </div>
+        <div class="text-center mt-3">
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+            <a asp-action="Index" asp-route-userRole="Admins" class="btn btn-secondary">Отмена</a>
+        </div>
+    </form>
+</div>

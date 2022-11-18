@@ -1,18 +1,18 @@
 ﻿@model IEnumerable<PhoneBook>
 @{
-	ViewBag.Title = "Phone book";
+	ViewBag.Title = "Телефонная книга";
 	Layout = "_Layout";
 }
 
-<body class="m-1 p-1">
+<div class="m-1 p-1">
 	<table class="table table-bordered table-striped">
 		<thead>
-			<tr><th>ID</th><th>Фамилия</th><th>Имя</th><th>Отчество</th></tr>
+			<tr><th>Номер</th><th>Фамилия</th><th>Имя</th><th>Отчество</th></tr>
 		</thead>
 		<tbody>
-			@if(Model == null)
+			@if(Model == null || Model.Count() == 0)
 			{
-				<tr><td colspan="4" class="text-center">No Model Data</td></tr>
+				<tr><td colspan="4" class="text-center">Нет данных</td></tr>
 			}
 			else
 			{
@@ -26,7 +26,7 @@
 						<td>
 							<form asp-action="Delete" method="post">
 								<input type="hidden" name="id" value="@p.Id" />
-								<button type="submit" class="btn btn-danger">Delete</button>
+								<button type="submit" class="btn btn-danger">Удалить</button>
 							</form>
 						</td>
 					</tr>
@@ -38,6 +38,9 @@
 	<div class="mb-1 fixed-bottom">
 		<div class="shadow-lg rounded">
 			<a asp-action="Create" class="btn align-self-center btn-primary ms-2 mb-1">Добавить</a>
+			<a asp-action="Index" asp-controller="Account" asp-route-userRole="@Context.Request.Cookies["UserRole"]" 
+			class="btn align-self-center btn-primary ms-2 mb-1">Администратор</a>
 		</div>
+			
 	</div>
-</body>
+</div>

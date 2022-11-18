@@ -1,73 +1,69 @@
-﻿using IdentityShared;
+﻿using HW_20.Services;
+using IdentityShared;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using System.Text;
 
 namespace HW_20.Controllers
 {
     public class HomeController : Controller
     {
-        HttpClient _client;
+        IPhoneBookRepository _phoneBook;
 
-        public HomeController(HttpClient client)
+        public HomeController(IPhoneBookRepository phoneBook)
         {
-            _client = client;
+            _phoneBook = phoneBook;
         }
 
-        public async Task<IActionResult> Index()
-        {
-            var response = await _client.GetAsync("http://localhost:16962/api/phonebook/getall");
-            var responseBody = await response.Content.ReadAsStringAsync();
-            var phoneBooks = JsonConvert.DeserializeObject<IEnumerable<PhoneBook>>(responseBody);
-            return View(phoneBooks);
-        }
+        public IActionResult Index() => View(_phoneBook.GetAllData().Result);
 
         public IActionResult Create()
         {
+            if (Request.Cookies["Token"] == null)
+                return View("../Account/AccessDenied");
+
             ViewBag.CreateModel = true;
             return View("About", new PhoneBook());
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(PhoneBook phoneBook)
+        public IActionResult Create(PhoneBook phoneBook)
         {
-            var jsonPhoneBook = JsonConvert.SerializeObject(phoneBook);
-            StringContent content = new StringContent(jsonPhoneBook, Encoding.UTF8, "application/json");
-            var result = await _client.PostAsync("http://localhost:16962/api/phonebook/create", content);
-
-            return RedirectToAction(nameof(Index));
-        }
-
-        public async Task<IActionResult> Edit(int id)
-        {
-            ViewBag.CreateModel = false;
-
-            var response = await _client.GetAsync($"http://localhost:16962/api/phonebook/get/{id}");
-            var responseBody = await response.Content.ReadAsStringAsync();
-            var phoneBook = JsonConvert.DeserializeObject<PhoneBook>(responseBody);
-
-            return View("About", phoneBook);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Edit(PhoneBook phoneBook)
-        {
-            var jsonPhoneBook = JsonConvert.SerializeObject(phoneBook);
-            StringContent content = new StringContent(jsonPhoneBook, Encoding.UTF8, "application/json");
-            await _client.PutAsync("http://localhost:16962/api/phonebook/edit", content);
-
-            return RedirectToAction(nameof(Index));
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Delete(int id)
-        {
-            var result = await _client.DeleteAsync($"http://localhost:16962/api/phonebook/delete/{id}");
+            var result = _phoneBook.Add(phoneBook, Request.Cookies["Token"]).Result;
 
             if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                 return View("../Account/AccessDenied");
 
             return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Edit(int id)
+        {
+            ViewBag.CreateModel = false;
+
+            var result = _phoneBook.Get(id, Request.Cookies["Token"]).Result;
+
+            if (result == null)
+                return View("../Account/AccessDenied");
+
+            return View("About", result);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(PhoneBook phoneBook)
+        {
+            var result = _phoneBook.Update(phoneBook, Request.Cookies["Token"]).Result;
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            var result = _phoneBook.Remove(id, Request.Cookies["Token"]);
+
+            if (result.StatusCode == System.Net.HttpStatusCode.OK)
+                return RedirectToAction(nameof(Index));
+
+            return View("../Account/AccessDenied");
         }
     }
 }

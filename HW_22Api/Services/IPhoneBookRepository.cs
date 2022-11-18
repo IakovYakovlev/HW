@@ -65,7 +65,8 @@ namespace HW_22Api.Services
 
         public void Remove(int id)
         {
-            _context.PhoneBooks.Remove(Get(id));
+            var item = _context.PhoneBooks.Where(x => x.Id == id).First();
+            _context.PhoneBooks.Remove(item);
             _context.SaveChanges();
         }
     }

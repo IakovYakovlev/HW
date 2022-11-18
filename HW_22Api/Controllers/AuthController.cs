@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HW_22Api.Controllers
 {
-    [Authorize(Roles = "Admins")]
     [Route("api/[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
@@ -15,6 +14,7 @@ namespace HW_22Api.Controllers
         public AuthController(IUserService userService) => _userService = userService;
 
         // /api/auth/getall
+        [AllowAnonymous]
         [HttpGet("GetAll")]
         public async Task<IActionResult> Get()
         {
@@ -41,6 +41,7 @@ namespace HW_22Api.Controllers
         }
 
         // /api/auth/login
+        [AllowAnonymous]
         [HttpPost("Login")]
         public async Task<IActionResult> LoginAsync([FromBody]LoginViewModel model)
         {
@@ -54,6 +55,7 @@ namespace HW_22Api.Controllers
         }
 
         // /api/auth/edit
+        [AllowAnonymous]
         [HttpPut("Edit")]
         public async Task<IActionResult> EditAsync([FromBody]Users user)
         {
@@ -66,7 +68,7 @@ namespace HW_22Api.Controllers
         }
 
         // /api/auth/delete/{id}
-        [Authorize(Roles = "Admins")]
+        [AllowAnonymous]
         [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> DeleteAsync(string id)
         {
